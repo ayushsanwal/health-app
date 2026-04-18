@@ -67,6 +67,7 @@ export default function Navbar() {
       {/* LINKS */}
       <div className="flex gap-6 text-gray-700 font-medium">
         <Link href="/">Home</Link>
+        <Link href="/dashboard">Dashboard</Link>
         <Link href="/bmi">BMI</Link>
         <Link href="/meal">Meal Plan</Link>
         <Link href="/marketplace">Marketplace</Link>

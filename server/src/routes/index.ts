@@ -9,6 +9,7 @@ import mealRoutes from "./meal.routes";
 import { authMiddleware, AuthRequest } from "../middlewares/auth.middleware";
 import productRoutes from "./product.routes";
 import chatRoutes from "./chat.routes";
+import dashboardRoutes from "./dashboard.routes";
 
 const router = Router();
 
@@ -35,6 +36,7 @@ router.use("/cart", authMiddleware, cartRoutes);
 router.use("/orders", authMiddleware, orderRoutes);
 router.use("/address", authMiddleware, addressRoutes);
 router.use("/meal", authMiddleware, mealRoutes);
+router.use("/dashboard", authMiddleware, dashboardRoutes);
 
 export default router;
 

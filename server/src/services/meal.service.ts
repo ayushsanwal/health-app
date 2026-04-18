@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { saveMealPlanSnapshot } from "../repositories/dashboard.repository";
 
 const prisma = new PrismaClient();
 
@@ -61,6 +62,7 @@ text = text.replace(/`json/g, "").replace(/`/g, "").trim();
 // 🔥 Convert string → JSON
 try {
 const parsed = JSON.parse(text);
+await saveMealPlanSnapshot(userId, parsed);
 return parsed;
 } catch (error) {
 throw new Error("Failed to parse meal plan response");

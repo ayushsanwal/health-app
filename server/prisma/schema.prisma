@@ -19,6 +19,9 @@ healthProfile UserHealthProfile?
 cart          Cart?
 orders        Order[]
 addresses     Address[]
+dashboardGoal DashboardGoal?
+progressLogs   ProgressLog[]
+mealPlans      MealPlanSnapshot[]
 }
 
 model Address {
@@ -144,3 +147,48 @@ order     Order    @relation(fields: [orderId], references: [id], onDelete: Casc
 product   Product  @relation(fields: [productId], references: [id])
 }
 
+model DashboardGoal {
+id             String   @id @default(uuid())
+userId         String   @unique
+user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+title          String
+targetWeight   Float?
+targetSteps    Int?
+targetWaterMl  Int?
+targetSleepHrs Float?
+deadline       DateTime?
+
+createdAt      DateTime @default(now())
+updatedAt      DateTime @updatedAt
+}
+
+model ProgressLog {
+id        String   @id @default(uuid())
+userId    String
+user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+logDate   DateTime
+weight    Float?
+sleepHrs  Float?
+waterMl   Int?
+steps     Int?
+notes     String?
+
+createdAt DateTime @default(now())
+updatedAt DateTime @updatedAt
+
+@@unique([userId, logDate])
+@@index([userId, logDate])
+}
+
+model MealPlanSnapshot {
+id        String   @id @default(uuid())
+userId    String
+user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+plan      Json
+createdAt DateTime @default(now())
+
+@@index([userId, createdAt])
+}
