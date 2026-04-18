@@ -8,6 +8,7 @@ import addressRoutes from "./address.routes";
 import mealRoutes from "./meal.routes"; 
 import { authMiddleware, AuthRequest } from "../middlewares/auth.middleware";
 import productRoutes from "./product.routes";
+import chatRoutes from "./chat.routes";
 
 const router = Router();
 
@@ -26,6 +27,7 @@ user: req.user,
 router.use("/auth", authRoutes);
 router.use("/health", healthRoutes);
 router.use("/products", productRoutes);
+router.use("/chat", chatRoutes);
 
 // 🔒 Protected routes
 router.use("/recommendations", authMiddleware, recommendationRoutes);
