@@ -18,7 +18,12 @@ export default function Chatbot() {
   useEffect(() => {
     const saved = localStorage.getItem("chat_history");
     if (saved) {
-      setMessages(JSON.parse(saved));
+      try {
+        const parsed: Message[] = JSON.parse(saved);
+        setMessages(parsed);
+      } catch {
+        console.error("Failed to parse chat history");
+      }
     }
   }, []);
 
@@ -30,7 +35,12 @@ export default function Chatbot() {
   const sendMessage = async () => {
     if (!input.trim()) return;
 
-    const newMessages = [...messages, { role: "user", text: input }];
+    const userMessage: Message = {
+      role: "user",
+      text: input,
+    };
+
+    const newMessages = [...messages, userMessage];
     setMessages(newMessages);
     setInput("");
     setLoading(true);
@@ -40,7 +50,7 @@ export default function Chatbot() {
 
       const res = await axios.post(
         "http://localhost:5000/api/chat",
-        { message: input },
+        { message: userMessage.text },
         {
           headers: token
             ? { Authorization: `Bearer ${token}` }
@@ -48,15 +58,21 @@ export default function Chatbot() {
         }
       );
 
-      setMessages([
-        ...newMessages,
-        { role: "bot", text: res.data.reply },
-      ]);
-    } catch (err) {
-      setMessages([
-        ...newMessages,
-        { role: "bot", text: "Something went wrong ❌" },
-      ]);
+      const botMessage: Message = {
+        role: "bot",
+        text: res.data.reply,
+      };
+
+      setMessages([...newMessages, botMessage]);
+
+    } catch {
+      const errorMessage: Message = {
+        role: "bot",
+        text: "Something went wrong ❌",
+      };
+
+      setMessages([...newMessages, errorMessage]);
+
     } finally {
       setLoading(false);
     }
@@ -117,6 +133,9 @@ export default function Chatbot() {
               onChange={(e) => setInput(e.target.value)}
               placeholder="Ask something..."
               className="flex-1 border rounded-lg px-3 py-2 text-sm text-gray-900"
+              onKeyDown={(e) => {
+                if (e.key === "Enter") sendMessage();
+              }}
             />
 
             <button
