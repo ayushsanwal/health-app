@@ -15,7 +15,7 @@ throw new Error("User profile not found");
 }
 
 const prompt = `
-Create a structured daily meal plan.
+Create a structured WEEKLY meal plan (7 days).
 
 User Details:
 Goal: ${profile.goal}
@@ -24,16 +24,26 @@ Diet: ${profile.dietPreference}
 Activity: ${profile.activityLevel}
 
 IMPORTANT:
-
-* Return ONLY JSON
-* Do NOT include markdown or backticks
+- Return ONLY valid JSON
+- Do NOT include markdown or backticks
+- Include calories
+- Provide plan for all 7 days
 
 Format:
 {
-"breakfast": "...",
-"lunch": "...",
-"dinner": "...",
-"snacks": "..."
+  "monday": {
+    "breakfast": { "meal": "...", "calories": number },
+    "lunch": { "meal": "...", "calories": number },
+    "dinner": { "meal": "...", "calories": number },
+    "snacks": { "meal": "...", "calories": number },
+    "totalCalories": number
+  },
+  "tuesday": { ... },
+  "wednesday": { ... },
+  "thursday": { ... },
+  "friday": { ... },
+  "saturday": { ... },
+  "sunday": { ... }
 }
 `;
 
